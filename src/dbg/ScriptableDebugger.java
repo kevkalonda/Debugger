@@ -23,54 +23,112 @@ public class ScriptableDebugger {
     private Class debugClass;
     // La machine virtuelle sur laquelle s’exécute la debugClass
     private VirtualMachine vm;
+    /**
+     * {@inheritDoc}
+     */
     List<BreakpointRequest> breakpointRequestList;
 
     int count;
     Error error;
+    /**
+     * {@inheritDoc}
+     */
     BreakpointRequestCount breakpointRequestCount;
-
+    /**
+     * {@inheritDoc}
+     */
     List<String> nameMethods;
 
     String cmd;
-
+    /**
+     * {@inheritDoc}
+     */
     Map<String, Command> commands = new HashMap<>();
-
+    /**
+     * {@inheritDoc}
+     */
     StepRequest step = null;
+    /**
+     * {@inheritDoc}
+     */
     StepRequest stepOver = null;
 
     public Error getError() {
         return error;
     }
 
-    public BreakpointRequestCount getBreakpointRequestCount(){
+    /**
+     * Accesseur sur le {@link  BreakpointRequestCount}
+     *
+     * @return {@link  BreakpointRequestCount}
+     */
+    public BreakpointRequestCount getBreakpointRequestCount() {
         return breakpointRequestCount;
     }
 
+    /**
+     * Retourne la commande
+     *
+     * @return {@link String}
+     */
     public String getCmd() {
         return cmd;
     }
 
+    /**
+     * Accesseur sur le {@link  StepRequest}
+     *
+     * @return {@link  StepRequest}
+     */
     public StepRequest getStep() {
         return step;
     }
 
+    /**
+     * Accesseur sur le {@link  StepRequest}
+     *
+     * @return {@link  StepRequest}
+     */
     public StepRequest getStepOver() {
         return stepOver;
     }
-    public void setStep(StepRequest s){
+
+    /**
+     * Accesseur sur le {@link  StepRequest}
+     *
+     * @param s {@link  StepRequest}
+     */
+    public void setStep(StepRequest s) {
         step = s;
     }
-    public void setStepOver(StepRequest s){
+
+    /**
+     * Accesseur sur le {@link  StepRequest}
+     *
+     * @param s {@link  StepRequest}
+     */
+    public void setStepOver(StepRequest s) {
         stepOver = s;
     }
 
-    public VirtualMachine getVm(){
+    /**
+     * Accesseur sur le {@link  VirtualMachine}
+     *
+     * @return {@link  VirtualMachine}
+     */
+    public VirtualMachine getVm() {
         return vm;
     }
 
-    public List<BreakpointRequest> getBreakpointRequestList(){
+    /**
+     * Accesseur sur la liste {@link  BreakpointRequest}
+     *
+     * @return une liste {@link  BreakpointRequest}
+     */
+    public List<BreakpointRequest> getBreakpointRequestList() {
         return breakpointRequestList;
     }
+
     /**
      * Initialisation des commandes
      */
@@ -97,14 +155,16 @@ public class ScriptableDebugger {
         commands.put("method", new CommandMethod());
         commands.put("arguments", new CommandArguments());
         commands.put("sender", new CommandSender());
-        commands.put("receir-variable", new CommandReceiverVariable());
+        commands.put("receiver-variables", new CommandReceiverVariable());
     }
 
     /**
-     * @return
-     * @throws IOException
-     * @throws IllegalConnectorArgumentsException
-     * @throws VMStartException
+     * Connexion sur la vm
+     *
+     * @return {@link VirtualMachine}
+     * @throws IOException                        exception
+     * @throws IllegalConnectorArgumentsException exception
+     * @throws VMStartException                   exception
      */
     public VirtualMachine connectAndLaunchVM() throws IOException, IllegalConnectorArgumentsException, VMStartException {
         LaunchingConnector launchingConnector = Bootstrap.virtualMachineManager().defaultConnector();
@@ -182,31 +242,10 @@ public class ScriptableDebugger {
     }
 
     /**
+     * Méthode qui active un breakpoints.
      *
-     * @param className
-     * @param lineNumber
-     * @param count
-     * @throws AbsentInformationException
-     *
-    public void enableBreakOnCount(String className, int lineNumber, int count) throws AbsentInformationException {
-        for (StepRequest stepR : vm.eventRequestManager().stepRequests()) {
-            stepR.disable();
-        }
-        className = "dbg." + className;
-
-        for (ReferenceType targetClass : vm.allClasses()) {
-            if (targetClass.name().equals(className)) {
-                Location location = targetClass.locationsOfLine(lineNumber).get(0);
-                BreakpointRequest breakpointRequest = vm.eventRequestManager().createBreakpointRequest(location);
-                breakpointRequest.disable();
-                breakpointRequestCount.setCount(count);
-                breakpointRequestCount.setClassName(className);
-                breakpointRequestCount.setLineNumber(lineNumber);
-                breakpointRequestCount.setBreakpointRequest(breakpointRequest);
-            }
-        }
-    }
-*/
+     * @param event {@link StepEvent}
+     */
     public void activeBreakCount(StepEvent event) {
         if (event.location().lineNumber() == breakpointRequestCount.getLineNumber()) {
             count++;
@@ -217,10 +256,20 @@ public class ScriptableDebugger {
         }
     }
 
+    /**
+     * Ajoute dans la liste de noms des méthodes pour la command BreakBeforeMethodCall
+     *
+     * @param methodName {@link String}
+     */
     public void enableBreakBeforeMethodCall(String methodName) {
         this.nameMethods.add(methodName);
     }
 
+    /**
+     * Arrête l'exécution au tout début de l’exécution de la méthode methodName se trouvant dans la liste de 'nameMethods'
+     *
+     * @param event {@link  StepEvent}
+     */
     public void exitProgMethod(StepEvent event) {
         for (String nameMethod : this.nameMethods) {
             if (event.location().method().name().equals(nameMethod)) {
@@ -229,6 +278,12 @@ public class ScriptableDebugger {
         }
     }
 
+    /**
+     * Desinstalle un breakpoints après l'avoir depasser.
+     *
+     * @param event {@link  Event}
+     * @throws AbsentInformationException exception
+     */
     public void uninstallBreakAfterReach(Event event) throws AbsentInformationException {
         BreakpointRequest bp = null;
         for (BreakpointRequest breakpointRequest : breakpointRequestList) {
@@ -246,6 +301,13 @@ public class ScriptableDebugger {
         }
     }
 
+    /**
+     * @param event {@link  Event}
+     * @throws IncompatibleThreadStateException exception
+     * @throws AbsentInformationException       exception
+     * @throws InterruptedException             exception
+     * @throws ClassNotLoadedException          exception
+     */
     public void choseMethode(Event event) throws IncompatibleThreadStateException, AbsentInformationException, InterruptedException, ClassNotLoadedException {
 
         System.out.print("Veuillez saisir une commande : ");
@@ -255,14 +317,24 @@ public class ScriptableDebugger {
         if (commands.containsKey(executeCmd)) {
             commands.get(executeCmd).execute(event, this);
         } else {
-                error.setMessage("Erreur Command \n"+"la commande '" + executeCmd + "' n'existe pas");
-                System.err.println(error.getMessage());
-                Thread.sleep(200);
-                error.reset();
-                choseMethode(event);
+            error.setMessage("Erreur Command \n" + "la commande '" + executeCmd + "' n'existe pas");
+            System.err.println(error.getMessage());
+            Thread.sleep(200);
+            error.reset();
+            choseMethode(event);
         }
     }
 
+    /**
+     * Launch le debbuger avec un breakpoints dans la class JDISimpleDebugee.
+     *
+     * @throws VMDisconnectedException          exception
+     * @throws InterruptedException             exception
+     * @throws IOException                      exception
+     * @throws AbsentInformationException       exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws ClassNotLoadedException          exception
+     */
     public void startDebugger() throws VMDisconnectedException, InterruptedException, IOException, AbsentInformationException, IncompatibleThreadStateException, ClassNotLoadedException {
         EventSet eventSet = null;
 

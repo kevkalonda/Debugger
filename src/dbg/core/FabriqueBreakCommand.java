@@ -6,14 +6,30 @@ import com.sun.jdi.request.BreakpointRequest;
 import com.sun.jdi.request.StepRequest;
 import dbg.ScriptableDebugger;
 
+/**
+ * FabriqueBreakCommand.class
+ */
 public final class FabriqueBreakCommand {
-
+    /**
+     * Désactive tous les steps
+     *
+     * @param vm {@link VirtualMachine}
+     */
     public static void disactiveAllStep(VirtualMachine vm) {
         for (StepRequest stepR : vm.eventRequestManager().stepRequests()) {
             stepR.disable();
         }
     }
 
+    /**
+     * Permet d'ajouter installe un point d’arrêt à la ligne
+     * lineNumber du fichier className.
+     *
+     * @param className          {@link String}
+     * @param lineNumber         {@link Integer}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException exception
+     */
     public static void setBreakPoint(String className, int lineNumber, ScriptableDebugger scriptableDebugger) throws AbsentInformationException {
         disactiveAllStep(scriptableDebugger.getVm());
         className = "dbg." + className;
@@ -26,6 +42,16 @@ public final class FabriqueBreakCommand {
         }
     }
 
+    /**
+     * Installe un point d’arrêt à
+     * la ligne lineNumber du fichier className. Ce point d’arrêt se désinstalle après
+     * avoir été atteint.
+     *
+     * @param className          {@link String}
+     * @param lineNumber         {@link Integer}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException exception
+     */
     public static void setBreakPointOnce(String className, int lineNumber, ScriptableDebugger scriptableDebugger) throws AbsentInformationException {
         disactiveAllStep(scriptableDebugger.getVm());
         className = "dbg." + className;
@@ -40,10 +66,13 @@ public final class FabriqueBreakCommand {
     }
 
     /**
-     * @param className
-     * @param lineNumber
-     * @param count
-     * @throws AbsentInformationException
+     * Installe un point d’arrêt à la ligne lineNumber du fichier fileName. Ce point d’arrêt ne
+     * s’active qu’après avoir été atteint un certain nombre de fois count
+     *
+     * @param className  {@link String}
+     * @param lineNumber {@link Integer}
+     * @param count      {@link Integer}
+     * @throws AbsentInformationException exception
      */
     public static void setBreakOnCount(String className, int lineNumber, int count, ScriptableDebugger scriptableDebugger) throws AbsentInformationException {
         disactiveAllStep(scriptableDebugger.getVm());
@@ -63,6 +92,16 @@ public final class FabriqueBreakCommand {
         }
     }
 
+    /**
+     * Vérifie si le nombre d'arguments passé en paramètre correspond pour exécuter la commande.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException       exception
+     * @throws ClassNotLoadedException          exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws InterruptedException             exception
+     */
     public static void enableBreakOnCount(Event event, ScriptableDebugger scriptableDebugger) throws AbsentInformationException, ClassNotLoadedException, IncompatibleThreadStateException, InterruptedException {
         if (scriptableDebugger.getCmd().split(" ").length == 4) {
             String className = scriptableDebugger.getCmd().split(" ")[1];
@@ -78,6 +117,16 @@ public final class FabriqueBreakCommand {
         scriptableDebugger.choseMethode(event);
     }
 
+    /**
+     * Vérifie si le nombre d'arguments passé en paramètre correspond pour exécuter la commande.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException       exception
+     * @throws ClassNotLoadedException          exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws InterruptedException             exception
+     */
     public static void enableSetBreakPoint(Event event, ScriptableDebugger scriptableDebugger) throws ClassNotLoadedException, IncompatibleThreadStateException, AbsentInformationException, InterruptedException {
         if (scriptableDebugger.getCmd().split(" ").length == 3) {
             String className = scriptableDebugger.getCmd().split(" ")[1];
@@ -92,6 +141,16 @@ public final class FabriqueBreakCommand {
         scriptableDebugger.choseMethode(event);
     }
 
+    /**
+     * Vérifie si le nombre d'arguments passé en paramètre correspond pour exécuter la commande.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException       exception
+     * @throws ClassNotLoadedException          exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws InterruptedException             exception
+     */
     public static void enableSetBreakPointOnce(Event event, ScriptableDebugger scriptableDebugger) throws AbsentInformationException, ClassNotLoadedException, IncompatibleThreadStateException, InterruptedException {
         if (scriptableDebugger.getCmd().split(" ").length == 3) {
             String className = scriptableDebugger.getCmd().split(" ")[1];
@@ -106,6 +165,16 @@ public final class FabriqueBreakCommand {
         scriptableDebugger.choseMethode(event);
     }
 
+    /**
+     * Vérifie si le nombre d'arguments passé en paramètre correspond pour exécuter la commande.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException       exception
+     * @throws ClassNotLoadedException          exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws InterruptedException             exception
+     */
     public static void enableBreakPoints(Event event, ScriptableDebugger scriptableDebugger) throws AbsentInformationException, ClassNotLoadedException, IncompatibleThreadStateException, InterruptedException {
         System.out.println("Liste des points d arrets actifs et leurs location  :");
         for (BreakpointRequest breakpointRequest : scriptableDebugger.getVm().eventRequestManager().breakpointRequests()) {

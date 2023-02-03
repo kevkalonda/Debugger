@@ -1,5 +1,8 @@
 package dbg;
 
+/**
+ * JDISimpleDebugger.class
+ */
 public class JDISimpleDebugger {
     public static void main(String[] args) throws Exception {
 

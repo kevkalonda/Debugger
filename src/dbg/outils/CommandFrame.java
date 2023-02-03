@@ -7,9 +7,22 @@ import com.sun.jdi.event.Event;
 import dbg.ScriptableDebugger;
 import dbg.core.FabriqueFrameCommand;
 
-public class CommandFrame implements Command{
+/**
+ * CommandFrame.class
+ */
+public class CommandFrame implements Command {
+    /**
+     * Renvoie et imprime la frame courante.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws IncompatibleThreadStateException exception
+     * @throws AbsentInformationException       exception
+     * @throws InterruptedException             exception
+     * @throws ClassNotLoadedException          exception
+     */
     @Override
     public void execute(Event event, ScriptableDebugger scriptableDebugger) throws IncompatibleThreadStateException, AbsentInformationException, InterruptedException, ClassNotLoadedException {
-        FabriqueFrameCommand.enableCommandFrame(event,scriptableDebugger);
+        FabriqueFrameCommand.enableCommandFrame(event, scriptableDebugger);
     }
 }

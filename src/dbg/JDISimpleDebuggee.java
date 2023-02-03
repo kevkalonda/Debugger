@@ -1,7 +1,13 @@
 package dbg;
 
+/**
+ * JDISimpleDebuggee.class
+ */
 public class JDISimpleDebuggee {
-
+    /**
+     * Main
+     * @param args {@link String[]}
+     */
     public static void main(String[] args) {
         String description = "Simple power " +
                 "printer";
@@ -10,13 +16,13 @@ public class JDISimpleDebuggee {
         int power = 2;
         boolean sortie = false;
         int compteur = 1;
-        /*while(!sortie){
+        while(!sortie){
             System.out.println("Compteur : "+compteur);
             if(compteur==5){
                 sortie = true;
             }
             compteur++;
-        }*/
+        }
         printPower(x, power);
     }
 

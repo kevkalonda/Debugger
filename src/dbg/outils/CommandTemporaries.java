@@ -10,11 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommandTemporaries implements Command{
+/**
+ * CommandTemporaries.Class
+ */
+public class CommandTemporaries implements Command {
+    /**
+     * Renvoie et imprime la liste des variables temporaires de la frame
+     * courante, sous la forme de couples nom -> valeur.
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws IncompatibleThreadStateException exception
+     * @throws AbsentInformationException       exception
+     * @throws InterruptedException             exception
+     * @throws ClassNotLoadedException          exception
+     */
     @Override
     public void execute(Event event, ScriptableDebugger scriptableDebugger) throws IncompatibleThreadStateException, AbsentInformationException, InterruptedException, ClassNotLoadedException {
-        StackFrame stackFrame=((LocatableEvent) event).thread().frame(0);
-        System.out.println("StackFrame : "+stackFrame);
+        StackFrame stackFrame = ((LocatableEvent) event).thread().frame(0);
+        System.out.println("StackFrame : " + stackFrame);
         List<Value> res = new ArrayList<>();
 
         try {
@@ -25,8 +39,8 @@ public class CommandTemporaries implements Command{
                 res.add(var.get(localVariable.name()));
             }
             System.out.println("Name  ==> Value");
-            for (int i=0;i<var.size();i++){
-                System.out.println(stackFrame.visibleVariables().get(i).name()+" ==> "+var.get(stackFrame.visibleVariables().get(i).name())+" ;  ");
+            for (int i = 0; i < var.size(); i++) {
+                System.out.println(stackFrame.visibleVariables().get(i).name() + " ==> " + var.get(stackFrame.visibleVariables().get(i).name()) + " ;  ");
             }
 
         } catch (AbsentInformationException ex) {
@@ -45,7 +59,7 @@ public class CommandTemporaries implements Command{
                     System.out.println("arguments == null");
                 }
                 for (Value argValue : res) {
-                    System.out.println("Variable : "+argValue);
+                    System.out.println("Variable : " + argValue);
                 }
             } catch (InternalException ex2) {
                 if (ex2.errorCode() != 32) {
@@ -53,8 +67,7 @@ public class CommandTemporaries implements Command{
                 }
             }
         }
+        // Redonne la main à l'exécution
         scriptableDebugger.choseMethode(event);
-
-
     }
 }

@@ -23,6 +23,12 @@ public final class FabriqueCommand {
         scriptableDebugger.getStep().enable();
     }
 
+    /**
+     * Dans cette méthode, nous configurons et activons une requête de step-over.
+     *
+     * @param event              {@link LocatableEvent}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     */
     public static void enableStepOverRequest(LocatableEvent event, ScriptableDebugger scriptableDebugger) {
         if (scriptableDebugger.getStepOver() == null) {
             StepRequest stepOver = scriptableDebugger.getVm().eventRequestManager().createStepRequest(
@@ -35,6 +41,11 @@ public final class FabriqueCommand {
         scriptableDebugger.getStepOver().enable();
     }
 
+    /**
+     * Dans cette méthode, nous configurons et activons une requête continue.
+     * @param event {@link LocatableEvent}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     */
     public static void enableStepContinueRequest(LocatableEvent event, ScriptableDebugger scriptableDebugger) {
         event.request().disable();
     }

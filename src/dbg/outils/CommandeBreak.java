@@ -7,15 +7,24 @@ import com.sun.jdi.event.Event;
 import dbg.ScriptableDebugger;
 import dbg.core.FabriqueBreakCommand;
 
+/**
+ * CommandeBreak.class
+ */
 public class CommandeBreak implements Command {
+    /**
+     * Installe un point d’arrêt à la ligne
+     * lineNumber du fichier fileName
+     *
+     * @param event              {@link Event}
+     * @param scriptableDebugger {@link ScriptableDebugger}
+     * @throws AbsentInformationException       exception
+     * @throws IncompatibleThreadStateException exception
+     * @throws InterruptedException             exception
+     * @throws ClassNotLoadedException          exception
+     */
     @Override
     public void execute(Event event, ScriptableDebugger scriptableDebugger) throws AbsentInformationException, IncompatibleThreadStateException, InterruptedException, ClassNotLoadedException {
-        /*String className = scriptableDebugger.getCmd().split(" ")[1];
-        String numberLine = scriptableDebugger.getCmd().split(" ")[2];
-        int lineNumber =  Integer.parseInt(numberLine);
-        //scriptableDebugger.enableBreakRequest((LocatableEvent) event);
-        scriptableDebugger.enableSetBreakPoint(className, lineNumber);
-        scriptableDebugger.choseMethode(event);*/
+
         FabriqueBreakCommand.enableSetBreakPoint(event, scriptableDebugger);
     }
 }
