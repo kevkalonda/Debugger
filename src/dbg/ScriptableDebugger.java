@@ -353,7 +353,7 @@ public class ScriptableDebugger {
                      * configuration d'une requête pour placer et activer un point d’arrêt dans la classe nommée
                      * className à la ligne lineNumber.
                      */
-                    setBreakPoint(debugClass.getName(), 6);
+                    setBreakPoint(debugClass.getName(), 15);
                 }
 
                 if (event instanceof BreakpointEvent) {
